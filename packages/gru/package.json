@@ -1,0 +1,26 @@
+{
+  "name": "@pclabs/gru",
+  "version": "0.0.0",
+  "description": "...",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test.js",
+    "lint": "eslint './**/*.js'"
+  },
+  "files": [
+    "/lib",
+    "index.js",
+    "cli.js"
+  ],
+  "bin": "cli.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "archiver": "^4.0.1",
+    "fs-extra": "^9.0.0",
+    "inquirer": "^7.1.0",
+    "shellpromise": "^1.4.0",
+    "yargs": "^15.3.1"
+  }
+}
