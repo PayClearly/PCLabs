@@ -1,0 +1,25 @@
+### Node ###
+# Logs
+*.log
+npm-debug.log*
+
+# linter cache
+.eslintcache
+
+# Dependency directory
+node_modules
+
+# OSX
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# SDKs
+.idea
+.sublime-project
+
+# NPM
+/**/node_modules/
+
+# temp
+/**/.temp/

@@ -1,0 +1,30 @@
+{
+  "name": "@pclabs/creditor",
+  "version": "0.0.0",
+  "description": "Scafolding tool for maintaining application patterns",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test.js",
+    "lint": "eslint './**/*.js'"
+  },
+  "files": [
+    "/lib",
+    "!/lib/**/**test.js",
+    "index.js",
+    "patterns.js"
+  ],
+  "bin": "cli.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "fs-extra": "^9.0.0",
+    "fuzzy-filter": "0.0.3",
+    "get-cursor-position": "^1.0.5",
+    "inquirer": "^7.1.0",
+    "inquirer-autocomplete-prompt": "^1.0.2",
+    "pluralize": "^8.0.0",
+    "require-context": "^1.1.0",
+    "yargs": "^15.3.1"
+  }
+}
