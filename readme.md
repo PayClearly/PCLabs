@@ -8,7 +8,7 @@ Highlights
   - [Creditor](/packages/creditor): A Cli for managing a project's patterns
   - [Gru](/packages/gru): A Cli for managing builds, deployments, and environments via git tags
   - [Minion](/packages/minion):  Use for serving multiple app versions via a single server
-  - [Gitit](/pacakges/gitit): A Cli for parsing out a git trunk branch history to inform deployment/release history
+  - [Gitit](/packages/gitit): A Cli for parsing out a git trunk branch history to inform deployment/release history
 
 ## Contibuting
 
