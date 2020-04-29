@@ -15,5 +15,6 @@
   "bin": "cli.js",
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "gitHead": "3d3b6a9083f9d3729d0a83a0655602eaf1ac3876"
 }
