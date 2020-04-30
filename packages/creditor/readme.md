@@ -1,6 +1,6 @@
 # Creditor
 
-Creditor is used to for maintaining and scaffolding boiler plate pattern code within a repository. Once templates are defined, Creditor makes it easy create, rename, moved, analyze and used these templates.
+Creditor is used to for maintaining and scaffolding boiler plate templates code within a repository. Once templates are defined, Creditor makes it easy create, rename, moved, analyze and used these templates.
 
 Creditor also uses the structure of the file system for defining how components should be used.
 
@@ -20,13 +20,13 @@ The directory /creditor needs to be sturctured as follows
   /_ package.json
   /_ creditor
     /_ templates
-      /_ [PATTERN_TYPE]
+      /_ [TEMPLATED_TYPE]
         /_ ...
         /_ files that will be scaffolded
     /_ config.js
 ```
 
-Once a [PATTERN_TYPE] is defined you may create this pattern in your repository by using the creditor cli. It is recommended that you add a line to your package.json file in order to do so.
+Once a [TEMPLATED_TYPE] is defined you may create this template in your repository by using the creditor cli. It is recommended that you add a line to your package.json file in order to do so.
 
 Add to package.json:
 ```
@@ -41,7 +41,7 @@ Once added, defined templates can be managed by calling:
   $: npm run scaffold
 ```
 
-The cli will then prompt for the information needed to scaffold a given pattern.
+The cli will then prompt for the information needed to scaffold a given template.
 
 templates are outputted to whatever output directory defined in config.js.
 
@@ -62,12 +62,12 @@ In order to get the full utility out of Creditor you will need to reconsider how
 Within code you wish to use scaffolded components, you'll need to do the following.
 
 ```
-  const { Mytemplates } = require('@pclabs/creditor/import')
+  const { MyTemplates } = require('@pclabs/creditor/import')
   
-  // All of the items of the 'myPattern' type will be imported and accessable in the same way they are structured in the file system
+  // All of the items of the 'myTemplate' type will be imported and accessable in the same way they are structured in the file system
   
-  // if a pattern of type 'myPattern' named 'dope' and in location /mytemplates/some/nested/location/dope then it would be acceasble as follows
-  const dope = Mytemplates.some.nested.location.dope;
+  // if a template of type 'myTemplate' named 'dope' and in location /myTemplates/some/nested/location/dope then it would be acceasble as follows
+  const dope = MyTemplates.some.nested.location.dope;
 ```
 
 
