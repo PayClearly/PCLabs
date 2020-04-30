@@ -20,7 +20,7 @@ module.exports = (config, answers = {}) => {
         type: 'list',
         name: 'pattern',
         choices: Object.keys(config.patterns),
-        message: `What pattern would you like to ${answers.action}?`,
+        message: `What template would you like to ${answers.action}?`,
       };
     },
     plural: () => {

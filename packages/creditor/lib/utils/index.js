@@ -160,7 +160,7 @@ function buildConfig() {
   config.cwd = process.cwd();
   config.rel = config.output || '/src';
   config.output = `${config.cwd}${config.output || '/src'}`;
-  const templates = templateConfigs(`${process.cwd()}/creditor/patterns`);
+  const templates = templateConfigs(`${process.cwd()}/creditor/templates`);
 
   Object.keys(templates || {}).forEach((pattern) => {
 

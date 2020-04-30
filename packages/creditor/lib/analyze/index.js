@@ -55,7 +55,7 @@ function getUsage(config, toReturn) {
 
   [
     config.rel,
-    '/creditor/patterns',
+    '/creditor/templates',
   ].forEach((rel) => {
     const filePaths = fs.allDirectories(`${config.cwd}${rel}`, item => item.type === 'file').map(item => item.slice(0, -1));
     filePaths.forEach((pathpart) => {
