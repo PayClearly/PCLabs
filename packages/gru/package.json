@@ -18,7 +18,7 @@
   "license": "ISC",
   "dependencies": {
     "archiver": "^4.0.1",
-    "fs-extra": "^9.0.0",
+    "fs-extra": "^7.0.1",
     "inquirer": "^7.1.0",
     "shellpromise": "^1.4.0",
     "yargs": "^15.3.1"
