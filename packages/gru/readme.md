@@ -1,7 +1,7 @@
 # Gru
-## Gru manages deploying and code deployment state in monorepos
+## Gru manages code deployment state in monorepos
 
-Gru uses tags to track of which version of your code is built and in which environments it is deployed.
+Gru uses tags to track which version of your code is built and in which environments it is deployed.
 
 The goal is to have your git repo be the single source of truth for the history and state of your code's builds and deployments!
 
@@ -11,7 +11,7 @@ The goal is to have your git repo be the single source of truth for the history 
 
 1. install 
 ```
-  npm install --save-dev gru
+  npm install --save-dev @pclabs/gru
 ```
 
 2. Add gru script to package.json
