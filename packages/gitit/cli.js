@@ -1,5 +1,12 @@
 #!/usr/bin/env node
-
-const gitit = require('./');
+const gitit = _tryRequire('@pclabs/gitit') || _tryRequire('./');
 
 return gitit;
+
+function _tryRequire(path) {
+  try {
+    return require(path);
+  } catch (e) {
+    return undefined;
+  }
+}

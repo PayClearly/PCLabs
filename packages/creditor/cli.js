@@ -1,10 +1,15 @@
 #!/usr/bin/env node
 
-const creditor = require('./');
 const argv = require('yargs').argv;
+const gru = _tryRequire('@pclabs/gru') || _tryRequire('./');
 
-const instance = creditor();
+const instance = gru();
+return instance.run(argv);
 
-return instance.prompt(argv).then((answers) => {
-  return instance.perform(answers);
-});
+function _tryRequire(path) {
+  try {
+    return require(path);
+  } catch (e) {
+    return undefined;
+  }
+}
