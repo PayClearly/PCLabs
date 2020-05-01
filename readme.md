@@ -12,11 +12,14 @@ Highlights
 
 ## Contributing
 
+In order to contrigute to this porject you need to have an envronment variable NPM_TOKEN. The npm token is used to identify you with npm. If you don't plan to actually release the app it must at least be set to somthing like XXXXXX. [see this blog article](https://blog.npmjs.org/post/118393368555/deploying-with-npm-private-modules)
+
 Clone and install and run
+
 ```
 $: npm run lint
-```
 
+```
 
 ### Project structure
 
