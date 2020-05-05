@@ -22,9 +22,9 @@ const _deploy = async(config, currentBuild, appName, buildKey, env) => {
   // delete the remote tat
   console.log('Tagging commit and pushing tag to Git');
   console.log('...');
-  const tagName = `${envTagPrefix}_${buildKey}`;
+  const tagName = `${envTagPrefix}_${env}`;
   await shellpromise(`git tag ${tagName}`);
-  await shellpromise(`git push origin :${tagName}`);
+  await shellpromise(`git push origin :${tagName}`).catch(() => {});
   await shellpromise(`git push origin ${tagName}`);
   console.log('Successfully tagged and pushed!');
 
