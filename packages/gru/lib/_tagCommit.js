@@ -1,6 +1,5 @@
-const shellpromise = require('shellpromise');
 
-const _tagCommit = async(config, currentBuild, appName, buildKey) => {
+const _tagCommit = async (delegates, config, currentBuild, appName, buildKey) => {
 
   // Skip if...
   if (currentBuild.tag) {
@@ -13,8 +12,7 @@ const _tagCommit = async(config, currentBuild, appName, buildKey) => {
   console.log('Tagging commit and pushing tag to Git');
   console.log('...');
   const tagName = `${buildTagPrefix}_${buildKey}`;
-  await shellpromise(`git tag ${tagName}`);
-  await shellpromise(`git push origin ${tagName}`);
+  await delegates.gitSetTag(tagName);
   console.log('Successfully tagged and pushed!');
 
   return tagName;

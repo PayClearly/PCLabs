@@ -21,6 +21,7 @@
     "fs-extra": "^7.0.1",
     "inquirer": "^7.1.0",
     "shellpromise": "^1.4.0",
+    "tmp": "^0.2.1",
     "yargs": "^15.3.1"
   },
   "gitHead": "3d3b6a9083f9d3729d0a83a0655602eaf1ac3876"

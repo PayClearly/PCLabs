@@ -1,4 +1,4 @@
-const _uploadToStorage = async(config, currentBuild, appName, buildKey) => {
+const _uploadToStorage = async (delegates, config, currentBuild, appName, buildKey, archiveLocation) => {
 
   // Skip if...
   if (currentBuild.buildKey) {
@@ -6,10 +6,11 @@ const _uploadToStorage = async(config, currentBuild, appName, buildKey) => {
     return;
   }
 
-  // TODO use tmp dir util
-  const destination = await config.apps[appName].cache(buildKey, `${__dirname}/../.temp/${appName}_${buildKey}_build.zip`);
+  const destination = await config.apps[appName].cache(buildKey, archiveLocation);
 
   console.log('Successfully uploaded to: ', destination);
+
+  return destination;
 };
 
 module.exports = _uploadToStorage;

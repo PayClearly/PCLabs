@@ -1,6 +1,5 @@
-const fs = require('fs-extra');
 
-const _generateBuild = async(config, currentBuild, appName, buildKey) => {
+const _generateBuild = async (delegates, config, currentBuild, appName, buildKey) => {
 
   // Skip if...
   if (currentBuild.buildKey) {
@@ -9,15 +8,11 @@ const _generateBuild = async(config, currentBuild, appName, buildKey) => {
   }
   
   console.log('Generating new build (this takes approximately 30 seconds)');
-  const buildAt = await config.apps[appName].build(buildKey);
-  console.log('BUILT: ', buildAt);
+  const builtAt = await config.apps[appName].build(buildKey);
 
-  // check that the build was successfully outputted to build directory
-  if (!fs.pathExistsSync(buildAt)) {
-    throw ('Did not successfully generate build for app');
-  }
+  console.log('BUILT: ', builtAt);
+  return builtAt;
 
-  console.log('Successfully generated build!');
 };
 
 module.exports = _generateBuild;

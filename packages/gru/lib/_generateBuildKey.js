@@ -1,4 +1,4 @@
-const _generateBuildKey = (config) => {
+const _generateBuildKey = (delegates, config) => {
   return Date.now().toString();
 };
 
