@@ -17,8 +17,9 @@ async function gitFetchTags() {
 
 async function gitSetTag(tagName) {
   await shellpromise('git fetch --tags');
-  await shellpromise(`git tag ${tagName}`);
+  await shellpromise(`git tag -d ${tagName}`).catch(() => {});
   await shellpromise(`git push origin :${tagName}`).catch(() => {});
+  await shellpromise(`git tag ${tagName}`);
   await shellpromise(`git push origin ${tagName}`);
   return tagName;
 }
