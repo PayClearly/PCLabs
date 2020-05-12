@@ -6,30 +6,26 @@ const btoa = require('btoa');
   TODO: use userpass/sshkey/token etc.. to credental the repo if necessary
 */
 
-const serviceToHost = {
-  github: 'github.com',
-};
-
 module.exports = (repo) => {
 
-  const { name, branch, service } = repo;
+  const { location = './', branch = 'master', remote = null } = repo;
   // TODO add proper validation errors
 
-  const repoLocation = `git@${serviceToHost[service.toLowerCase()]}:${name}.git`;
-  const id = btoa(repoLocation);
-
   async function sync () {
-    await _checkIfCredsAreValid(repoLocation, repo);
-    await _cloneRepoIfDoesntExist(id, repo);
-    _log(`Updating ${branch}...`);
-    await shell(`cd ./.temp/${id} && git reset --hard ${branch} && git checkout ${branch}`);
-    await shell(`cd ./.temp/${id} && git pull`);
+
+    if (remote) {
+      await _checkIfCredsAreValid(repo);
+      await _cloneRepoIfDoesntExist(repo);
+    }
+
+    await shell(`cd ${location} && git reset --hard ${branch} && git checkout ${branch}`);
+    await shell(`cd ${location} && git pull`);
   }
 
   async function parse() {
 
     // get of the relevant commit data in order
-    const rawCommits = (await shell(`cd ./.temp/${id} && git reset --hard ${branch} && git checkout ${branch} && git log --no-decorate --topo-order --raw --pretty='format:-::::- %H -:::- %ae -:::- %at000 -:::- %P -:::- %s -:::- ' | cat && echo \n`)).split('-::::- ');
+    const rawCommits = (await shell(`cd ${location} && git reset --hard ${branch} && git checkout ${branch} && git log --no-decorate --topo-order --raw --pretty='format:-::::- %H -:::- %ae -:::- %at000 -:::- %P -:::- %s -:::- ' | cat && echo \n`)).split('-::::- ');
 
     const commits = {};
     const branches = {};
@@ -82,7 +78,7 @@ module.exports = (repo) => {
     });
 
     // get all of the branches
-    const rawBranches = (await shell(`cd ./.temp/${id} && git branch -v -r --format='%(refname:lstrip=2) -:::- %(objectname) -:::- %(authoremail)' | cat`)).split('\n').map(item => item.trim());
+    const rawBranches = (await shell(`cd ${location} && git branch -v -r --format='%(refname:lstrip=2) -:::- %(objectname) -:::- %(authoremail)' | cat`)).split('\n').map(item => item.trim());
 
     rawBranches.forEach((data) => {
       let [ name, head, author ] = data.split(' -:::- ');
@@ -98,7 +94,7 @@ module.exports = (repo) => {
     });
 
     // get tag information
-    const rawTags = (await shell(`cd ./.temp/${id} && git show-ref --tags -d | cat`)).split('\n').filter(item => item);
+    const rawTags = (await shell(`cd ${location} && git show-ref --tags -d | cat`)).split('\n').filter(item => item);
 
     rawTags.forEach((data) => {
       let [ head, name ] = data.split(' ');
@@ -124,30 +120,39 @@ module.exports = (repo) => {
   };
 
   // Private helpers
-  async function _cloneRepoIfDoesntExist(id, repo){
-    const dirExists = await _doesLocationExist('./.temp');
-    if(!dirExists) {
-      await shell('mkdir ./.temp');
-    }
-    const repoExists = await _doesLocationExist('./.temp/' + id);
-    if(!repoExists) {
-      _log(`Cloning...`);
-      await shell('cd ./.temp && git clone ' + repoLocation + ' ' + id);
-    }
-  }
 
+  // for managing as separate project
   async function _doesLocationExist(path) {
     return shell('ls ' + path)
       .then(() => true)
       .catch(() => false);
   }
 
-  async function _checkIfCredsAreValid(repoLocation, creds, service) {
+  async function _checkIfCredsAreValid(repo) {
     _log(`TODO: Logging in...`);
   }
 
+  async function _cloneRepoIfDoesntExist(repo){
+
+    const location = repo.location.split('/');
+    const id = location.pop();
+    const dir = location.join('/');
+
+    console.log(id);
+    console.log(dir);
+    const dirExists = await _doesLocationExist(dir);
+    if(!dirExists) {
+      await shell(`mkdir ${dir}`);
+    }
+    const repoExists = await _doesLocationExist(dir + id);
+    if(!repoExists) {
+      _log(`Cloning...`);
+      await shell(`cd ${dir} && git clone ${repo.remote} ${id}`);
+    }
+  }
+
   function _log(message) {
-    console.log(`${repoLocation}: ${message}`);
+    console.log(`${location}: ${message}`);
   }
 
 };

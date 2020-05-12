@@ -2,10 +2,10 @@ const gitit = require('../');
 
 const config = {
   repo: {
-    service: 'github',
-    name: 'PayClearly/app',
+    remote: 'git@github.com:PayClearly/app.git', // options for pulling a remote
+    location: './.temp/PCApp',
     branch: 'develop', // the branch of interest
-    creds: {}, // TODO
+    creds: {}, // FUTURE
     entryParser: {}, // FUTURE
   },
   project: {

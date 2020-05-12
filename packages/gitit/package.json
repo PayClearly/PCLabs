@@ -18,6 +18,8 @@
   "license": "ISC",
   "gitHead": "3d3b6a9083f9d3729d0a83a0655602eaf1ac3876",
   "dependencies": {
-    "named-regexp-groups": "^1.0.5"
+    "btoa": "^1.2.1",
+    "named-regexp-groups": "^1.0.5",
+    "shellpromise": "^1.4.0"
   }
 }
