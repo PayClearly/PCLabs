@@ -3,10 +3,10 @@ const NamedRegExp = require('named-regexp-groups');
 
 module.exports = (config) => {
 
-  const regexGroupKeys = { prId: 'null', releaseId: null, buildId: null, wipId: null, ticketId: null };
+  const regexGroupKeys = { prId: 'null', releaseId: null, buildId: null, wipId: null, ticketId: null, envId: null };
 
   return {
-    parse: async (repoData) => {
+    parse: async (options, repoData) => {
       const { commits, branches, tags } = repoData;
 
       const toReturn = {};
@@ -62,13 +62,13 @@ module.exports = (config) => {
           .reduce((acc, item) => {
             const val = data[item];
             const old = (toReturn[`${regexGroupKey.slice(0, -2)}s`][btoa(matches[regexGroupKey])] && toReturn[`${regexGroupKey.slice(0, -2)}s`][btoa(matches[regexGroupKey])][item]);
-            acc = { ...acc, [item]: largeest(val || old)};
+            acc = { ...acc, [item]: largest(val || old)};
             return acc;
           }, {});
       }
     });
 
-    function largeest(a, b) {
+    function largest(a, b) {
       if (a && b) {
         if (a > b) return a;
         return b;

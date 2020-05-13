@@ -8,24 +8,33 @@ const btoa = require('btoa');
 
 module.exports = (repo) => {
 
-  const { location = './', branch = 'master', remote = null } = repo;
+  const { location = './', branch = 'master', remote = null, debug = false } = repo;
   // TODO add proper validation errors
 
-  async function sync () {
+  async function sync (options = {}) {
 
     if (remote) {
       await _checkIfCredsAreValid(repo);
       await _cloneRepoIfDoesntExist(repo);
     }
 
-    await shell(`cd ${location} && git reset --hard ${branch} && git checkout ${branch}`);
+    // TODO 
+    const currentBranch = shell(`cd ${location} && git rev-parse --abbrev-ref HEAD`);
+    if (currentBranch !== branch && !options.stash) {
+      _log(`EXITING: you are on ${currentBranch} but the trunk branch is ${branch}`);
+    }
+
+    _log(`Stashing changes`);
+    await shell(`cd ${location} && git stash`);
+
+    await shell(`cd ${location} && git checkout ${branch}`);
     await shell(`cd ${location} && git pull`);
   }
 
   async function parse() {
 
     // get of the relevant commit data in order
-    const rawCommits = (await shell(`cd ${location} && git reset --hard ${branch} && git checkout ${branch} && git log --no-decorate --topo-order --raw --pretty='format:-::::- %H -:::- %ae -:::- %at000 -:::- %P -:::- %s -:::- ' | cat && echo \n`)).split('-::::- ');
+    const rawCommits = (await shell(`cd ${location} && git checkout ${branch} && git log --no-decorate --topo-order --raw --pretty='format:-::::- %H -:::- %ae -:::- %at000 -:::- %P -:::- %s -:::- ' | cat && echo \n`)).split('-::::- ');
 
     const commits = {};
     const branches = {};
@@ -138,13 +147,11 @@ module.exports = (repo) => {
     const id = location.pop();
     const dir = location.join('/');
 
-    console.log(id);
-    console.log(dir);
     const dirExists = await _doesLocationExist(dir);
     if(!dirExists) {
       await shell(`mkdir ${dir}`);
     }
-    const repoExists = await _doesLocationExist(dir + id);
+    const repoExists = await _doesLocationExist(repo.location);
     if(!repoExists) {
       _log(`Cloning...`);
       await shell(`cd ${dir} && git clone ${repo.remote} ${id}`);
@@ -152,6 +159,7 @@ module.exports = (repo) => {
   }
 
   function _log(message) {
+    if (!debug) return;
     console.log(`${location}: ${message}`);
   }
 

@@ -18,8 +18,12 @@
   "license": "ISC",
   "gitHead": "3d3b6a9083f9d3729d0a83a0655602eaf1ac3876",
   "dependencies": {
+    "atob": "^2.1.2",
     "btoa": "^1.2.1",
+    "chalk": "^4.0.0",
+    "inquirer": "^7.1.0",
     "named-regexp-groups": "^1.0.5",
+    "semver": "^7.3.2",
     "shellpromise": "^1.4.0"
   }
 }
