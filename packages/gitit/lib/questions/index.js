@@ -1,4 +1,4 @@
-const inquiryWrapper = require('../../../creditor/lib').inquiryWrapper;
+const inquiryWrapper = require('./inquiryWrapper');
 const semver = require('semver');
 const chalk = require('chalk');
 const atob = require('atob');
