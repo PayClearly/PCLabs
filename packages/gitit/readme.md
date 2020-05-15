@@ -28,6 +28,7 @@ If you are the type of team that likes to have a single source of truth for the 
 // TODO
 
 ## Backlog
+// Make public cli work by importing config as file
 // Move inquirer wrapper into own package
 // Move pathed JSON into own package... perhaps with test-persistance
 // Limit data pulled in by updated date...

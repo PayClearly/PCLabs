@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 const gitit = _tryRequire('@pclabs/gitit') || _tryRequire('./');
 
-return gitit;
+return gitit.prompt();
 
 function _tryRequire(path) {
   try {
