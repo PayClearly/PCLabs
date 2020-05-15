@@ -3,7 +3,7 @@ const NamedRegExp = require('named-regexp-groups');
 
 module.exports = (config) => {
 
-  const regexGroupKeys = { prId: 'null', releaseId: null, buildId: null, wipId: null, ticketId: null, envId: null };
+  const regexGroupKeys = { prId: 'null', releaseId: null, buildId: null, wipId: null, ticketId: null, envId: null, envReqId: null, releaseReqId: null };
 
   return {
     parse: async (options, repoData) => {

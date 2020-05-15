@@ -24,14 +24,21 @@ const config = {
     //   releaseRequestId: id representing a releaseRequest // TODO
     commitParsers: [/Merge pull request #(:<prId>[0-9]{1,7}) from PayClearly\/(:<ticketId>PC-[0-9]{1,7})/],  // parses commit messages to find the above
     branchParsers: [/\/(:<wipId>PC-[0-9]{1,7})$/], // parses branch names to find the above
-    tagParsers: [/build_app_(:<buildId>[0-9]{10,15})$/, /env_(:<envId>[A-Za-z]{2,10}_[A-Za-z]{2,15})$/, /release_(:<releaseId>[A-Za-z]{2,10}_[v.a-z0-9]{2,15})$/], // parses branch names to find the above
+    tagParsers: [
+      /build_app_(:<buildId>[0-9]{10,15})$/,
+      /env_(:<envId>[A-Za-z]{2,10}_[A-Za-z]{2,15})$/,
+      /release_(:<releaseId>[A-Za-z]{2,10}_[v.a-z0-9]{2,15})$/,
+      /envreq_(:<envReqId>[A-Za-z]{2,10}_[a-z0-9_]{2,30})$/,
+      /releasereq_(:<releaseReqId>[A-Za-z]{2,10}_[a-z0-9_]{2,20})$/,
+    ], // parses branch names to find the above },
   },
   tickets: {
     // TODO allow the definition of a tickets structure
   },
-  hooks: {
-    apps: [] // or default
-    // how to handle certain action
+  delegates: {
+    onAnswers: async (answers) => {
+      console.log('answers', answers);
+    }
   }
 };
 

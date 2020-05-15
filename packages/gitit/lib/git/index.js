@@ -28,7 +28,7 @@ module.exports = (repo) => {
     await shell(`cd ${location} && git stash`);
 
     await shell(`cd ${location} && git checkout ${branch}`);
-    await shell(`cd ${location} && git pull`);
+    await shell(`cd ${location} && git pull --tags`);
   }
 
   async function parse() {

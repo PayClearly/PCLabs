@@ -13,7 +13,21 @@ module.exports = (data, answers) => {
       const app = val.split('_')[0];
       const env = val.split('_')[1];
       acc[app] = acc[app] || {};
-      acc[app][commit] = env;
+      acc[app][commit] = acc[app][commit] || [];
+      acc[app][commit].push(env);
+      return acc;
+    }, {});
+
+  data.commitsToEnvReqs = Object.keys(data.projectData.envReqs || {})
+    .filter(item => item)
+    .reduce((acc, encoded) => {
+      const val = atob(encoded);
+      const commit = data.projectData.envReqs[encoded].commitId;
+      const app = val.split('_')[0];
+      const envReq = val.split('_')[1];
+      acc[app] = acc[app] || {};
+      acc[app][commit] = acc[app][commit] || [];
+      acc[app][commit].push(envReq);
       return acc;
     }, {});
 
@@ -25,8 +39,19 @@ module.exports = (data, answers) => {
       const app = val.split('_')[0];
       const release = val.split('_')[1];
       acc[app] = acc[app] || {};
-      acc[app][commit] = release;
-      acc[app]['c_4497'] = '0.0.0';
+      acc[app][commit] = semver.coerce(release).raw;
+      return acc;
+    }, {});
+
+  data.commitsToReleaseReqs = Object.keys(data.projectData.releaseReqs || {})
+    .filter(item => item)
+    .reduce((acc, encoded) => {
+      const val = atob(encoded);
+      const commit = data.projectData.releaseReqs[encoded].commitId;
+      const app = val.split('_')[0];
+      const releaseReqs = val.split('_')[1];
+      acc[app] = acc[app] || {};
+      acc[app][commit] = releaseReqs;
       return acc;
     }, {});
 
@@ -42,9 +67,6 @@ module.exports = (data, answers) => {
 };
 
 const questions = (data, answers = {}) => {
-
-  // console.log(data.projectData.tickets);
-  // console.log(data.projectData.envs);
 
   const apps = data.apps || ['wfs', 'app'];
   const envs = data.envs || ['staging', 'prod'];
@@ -78,6 +100,7 @@ const questions = (data, answers = {}) => {
       let currentRelease;
       const releaseObj = {};
       const envObj = {};
+      const envReqObj = {};
 
       Object.keys(data.commitsToTickets || {})
         .reverse()
@@ -85,25 +108,31 @@ const questions = (data, answers = {}) => {
           const ticket = data.commitsToTickets[commitId];
 
           const release = data.commitsToReleases && data.commitsToReleases[answers.app] && data.commitsToReleases[answers.app][commitId];
-          const env = data.commitsToEnvs && data.commitsToEnvs[answers.app] && data.commitsToEnvs[answers.app][commitId];
+          const envs = data.commitsToEnvs && data.commitsToEnvs[answers.app] && data.commitsToEnvs[answers.app][commitId];
+          const envReqs = data.commitsToEnvReqs && data.commitsToEnvReqs[answers.app] && data.commitsToEnvReqs[answers.app][commitId];
 
           currentRelease = release || currentRelease;
           if (!currentRelease) return;
 
-          envObj[currentRelease] = envObj[currentRelease] || env || '';
+          envObj[currentRelease] = envObj[currentRelease] || envs || '';
+          envReqObj[currentRelease] = envReqObj[currentRelease] || envReqs || '';
           releaseObj[currentRelease] = releaseObj[currentRelease] || [];
-          if (releaseObj[currentRelease].length > 11) return;
-          if (releaseObj[currentRelease].length > 10) return releaseObj[currentRelease].push('...');
+          if (releaseObj[currentRelease].length > 4) return;
+          if (releaseObj[currentRelease].length > 3) return releaseObj[currentRelease].push('...');
           releaseObj[currentRelease].push(ticket);
         });
-        
+      
       const releses = Object.keys(releaseObj || {})
         .map((releaseId) => {
-          const env = envObj[releaseId];
-          console.log(envObj)
-          return `${releaseId}` + ' ' + (env && chalk.grey((env + ' ')) || '' ) + chalk.grey('(' + releaseObj[releaseId].reduce((acc, ticket) => {
-            return acc + ((acc.length && ', ') || '') + `${ticket}`;
-          }, '') + ')');
+          const envs = envObj[releaseId];
+          const envReqs = envReqObj[releaseId];
+          return `${releaseId}`
+            + ' '
+            + (envReqs && chalk.red(('deploying to ' + envReqs + ' ')) || '' )
+            + (envs && chalk.bold((envs + ' ')) || '' )
+            + chalk.grey('(' + releaseObj[releaseId].reduce((acc, ticket) => {
+              return acc + ((acc.length && ', ') || '') + `${ticket}`;
+            }, '') + ')');
         });
 
       return {
@@ -122,9 +151,10 @@ const questions = (data, answers = {}) => {
           const ticket = data.commitsToTickets[commitId];
 
           const release = data.commitsToReleases && data.commitsToReleases[answers.app] && data.commitsToReleases[answers.app][commitId];
-          const env = data.commitsToEnvs && data.commitsToEnvs[answers.app] && data.commitsToEnvs[answers.app][commitId];
+          const releaseReq = data.commitsToReleaseReqs && data.commitsToReleaseReqs[answers.app] && data.commitsToReleaseReqs[answers.app][commitId];
+          const envs = data.commitsToEnvs && data.commitsToEnvs[answers.app] && data.commitsToEnvs[answers.app][commitId];
 
-          return `${ticket}${release && ` ${chalk.green(release)}`|| ''}${env && ` ${chalk.cyan(env)}`|| ''}`;
+          return `${ticket}${releaseReq && chalk.red(` creating release ${releaseReq}...`)  || ''}${release && ` ${chalk.green(release)}`|| ''}${envs && ` ${chalk.cyan(envs)}`|| ''}`;
         })
         .reverse().concat([' ---- Bottom ----', ' ', ' ',' ', ' ', ' ', ' ', ' ---- Merged ----']);
 
@@ -153,7 +183,7 @@ const questions = (data, answers = {}) => {
       return {
         type: 'input',
         name: 'newVersion',
-        message: `Which version of ${answers.app} do you want to deploy ${(lowV || highV) && chalk.cyan(`(${lowV && ` >${lowV}` || ''}${lowV && highV && ' ,' || ''}${highV && ` <${highV}` || '' } )`)}?`,
+        message: `What would you like the version to be${(lowV || highV) && chalk.cyan(` (${lowV && ` >${lowV}` || ''}${lowV && highV && ' ,' || ''}${highV && ` <${highV}` || '' } )`) || ''}?`,
         validate: (input) => {
           if (answers.ticket.indexOf(' ') === 0) return 'go back and select a valid ticket';
           if (answers.ticket.split(' ')[1]) return `${answers.ticket.split(' ')[0]} already has a release(${answers.ticket.split(' ')[1]}) associated with it, go back to fix`;
@@ -217,7 +247,7 @@ function stateRenderer(answers, questions = []) {
     toReturn += `  ${sr('action')} ${sr('app')} v${sr('existingVersion')} to ${sr('env')}`;
     break;
   case 'release':
-    toReturn += `  Cut ${sr('action')} for ${sr('app')} at ${sr('ticket')} as ${sr('newVersion')}`;
+    toReturn += `  Cut ${sr('action')} from ${sr('app')} at ${sr('ticket')} as ${sr('newVersion')}`;
     break;
   default:
     toReturn += chalk.green('?:');
@@ -237,11 +267,8 @@ ${!done && chalk.dim('Ctrl + b to go back') || ''}
 }
 
 const logo = `
-  $$     $     $             
- $ $  $ $$$ $ $$$
-  $$  $  $  $  $ 
+  $$     $        $             
+ $ $  $ $$$    $ $$$
+  $$  $  $     $  $ 
 
 `;
-
-
-

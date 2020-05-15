@@ -12,32 +12,35 @@ Highlights
 
 ## Contributing
 
-In order to contrigute to this porject you need to have an envronment variable NPM_TOKEN. The npm token is used to identify you with npm. If you don't plan to actually release the app it must at least be set to somthing like XXXXXX. [see this blog article](https://blog.npmjs.org/post/118393368555/deploying-with-npm-private-modules)
+In order to contribute to this porject you need to have an envronment variable NPM_TOKEN. The npm token is used to identify you with npm. If you don't plan to actually release the app it must at least be set to somthing like XXXXXX. [see this blog article](https://blog.npmjs.org/post/118393368555/deploying-with-npm-private-modules)
+
+This is a mono repo that uses [Lerna](https://lerna.js.org/) for keeping track of local dependencies. [This video](https://www.youtube.com/watch?v=Nn8G91x8tJI&app=desktop) was helpful with learning how Lerna works. Lerna must be installed globally.
 
 Clone and install and run
 
 ```
-$: npm run lint
+$: git clone ....
+$: cd PClabs
+$: npm run bootstrap
 
 ```
 
 ### Project structure
 
-This is a mono repo that uses [Lerna](https://lerna.js.org/) for keeping track of local dependencies. [This video](https://www.youtube.com/watch?v=Nn8G91x8tJI&app=desktop) was helpful with learning how Lerna works. Lerna must be installed globally.
-
 This mono repo is made up of sub-packages with the following structure. Packages have the same structure as follows
 
 ```
 --  /packages/[PACKAGE]
-  /_  /lib        // contains the packages local utils
+  /_  /lib          // contains the packages local utils
   /_  index.js      // the package's entry point
   /_  test.js       // the test file for the package
   /_  readme.md     // the package overview
   /_  cli.js        // if a cli exists it is the cli entry
-  /_  package.json    // package dependencies
+  /_  package.json  // package dependencies
 ```
 
 We also use [Creditor](/packages/creditor) for scaffolding out new packages with this structure
+
 ```
 $: npm run scaffold
 ```
