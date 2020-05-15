@@ -7,6 +7,7 @@ module.exports = {
   archive,
   gitFetchTags,
   gitSetTag,
+  gitRemoveTag,
 };
 
 async function gitFetchTags() {
@@ -21,6 +22,13 @@ async function gitSetTag(tagName) {
   await shellpromise(`git push origin :${tagName}`).catch(() => {});
   await shellpromise(`git tag ${tagName}`);
   await shellpromise(`git push origin ${tagName}`);
+  return tagName;
+}
+
+async function gitRemoveTag(tagName) {
+  await shellpromise('git fetch --tags');
+  await shellpromise(`git tag -d ${tagName}`).catch(() => {});
+  await shellpromise(`git push origin :${tagName}`).catch(() => {});
   return tagName;
 }
 

@@ -5,6 +5,6 @@ const instance = gitit({});
 
 describe('@pclabs/gitit', () => {
   it('should run', () => {
-    expect(instance.name()).to.equal('gitit');
+    expect(typeof instance.prompt === 'function').to.equal(true);
   });
 });

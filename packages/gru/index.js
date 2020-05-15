@@ -6,6 +6,7 @@ const _generateBuild = require('./lib/_generateBuild');
 const _archiveBuild = require('./lib/_archiveBuild');
 const _uploadToStorage = require('./lib/_uploadToStorage');
 const _tagCommit = require('./lib/_tagCommit');
+const _release = require('./lib/_release');
 const _deploy = require('./lib/_deploy');
 
 module.exports = (options, _delegates) => {
@@ -17,7 +18,7 @@ module.exports = (options, _delegates) => {
     run: async (givenAnswers = {}) => {
       // step 1: Make sure all options were given
       console.log('\x1b[35m%s\x1b[0m', `\nStep 1: Inquire for needed information`);
-      const { app, cache, deployTo } = await _determineParametersToUse(givenAnswers, config);
+      const { app, cache, deployTo, release } = await _determineParametersToUse(givenAnswers, config);
 
       // step 2: Check git for current tags to make sure a build doesn't already exist for this
       console.log('\x1b[35m%s\x1b[0m', `\nStep 2: Stashing unsaved changes and checking for existing build`);
@@ -45,14 +46,19 @@ module.exports = (options, _delegates) => {
       console.log('\x1b[35m%s\x1b[0m', `\nStep 6: Tag commit with build key`);
       const tag = await _tagCommit(delegates, config, currentBuild, app, buildKey);
 
+      // step 6: tag commit with new build -- will skip if there is a current build
+      console.log('\x1b[35m%s\x1b[0m', `\nStep 7: Tag commit with release key`);
+      await _release(delegates, config, currentBuild, app, buildKey, release);
+
       if (!deployTo) {
         console.log('\x1b[35m%s\x1b[0m', `\nDONE: code is in destination: ${{ buildKey, tag }}\n `);
         return { buildKey, tag };
       }
 
-      // step 7: deploy code to desired environment
-      console.log('\x1b[35m%s\x1b[0m', `\nDONE: the code has been build and deployed ${{ buildKey, tag, env: deployTo }}\n `);
+      // step 8: deploy code to desired environment
+      console.log('\x1b[35m%s\x1b[0m', `\nStep 8: Deploying code`);
       await _deploy(delegates, config, currentBuild, app, buildKey, deployTo);
+      console.log('\x1b[35m%s\x1b[0m', `\nDONE: the code has been build and deployed ${{ buildKey, tag, env: deployTo }}\n `);
       return { buildKey, tag };
     },
   };
@@ -67,6 +73,7 @@ async function _determineParametersToUse(args, config) {
   let app = args.app;
   let cache = args.cache === 'true';
   let deployTo = args.deployTo;
+  let release = args.release;
 
   if (args.custom) {
     // if a custom string was given... do not inquire
@@ -74,6 +81,7 @@ async function _determineParametersToUse(args, config) {
     app = fromCustom.app || app;
     cache = fromCustom.cache || cache;
     deployTo = fromCustom.deployTo || deployTo;
+    release = fromCustom.release || release;
   } else {
     // else inquire for additional needed information
     const possibleInquires = {
@@ -99,6 +107,7 @@ async function _determineParametersToUse(args, config) {
     app = fromInquires.app || app;
     cache = fromInquires.cache || app;
     deployTo = fromInquires.deployTo || deployTo;
+    release = fromInquires.release || release;
   }
 
   if (!validApps.some(validApp => validApp === app)) throw (`The appName given (${app}) is not valid`);
@@ -107,6 +116,7 @@ async function _determineParametersToUse(args, config) {
     app,
     cache,
     deployTo,
+    release,
   };
 
 }

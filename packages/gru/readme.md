@@ -50,8 +50,14 @@ You will need to export a config file from .gruconfig.js that defines how to dep
     apps: {
       [APPNAME]: {
         name: [APPNAME]
-        buildTagPrefix: // the prefix associated with builds
-        envTagPrefix: // the prefix associated with environments
+        buildTagPrefix: // the prefix associated with builds.
+        envTagPrefix: // the prefix associated with environments,
+        envReqTagPrefix: // the prefix associated with environment requests,
+        releaseTagPrefix: // the prefix associated with releases requests,
+        releaseReqTagPrefix: // the prefix associated with releases requests,
+
+        buildTagPrefix: 
+        envTagPrefix: 
 
         // DELEGATES
         build: async function(buildKey) {

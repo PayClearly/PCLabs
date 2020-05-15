@@ -1,7 +1,8 @@
 
 const _deploy = async (delegates, config, currentBuild, appName, buildKey, env) => {
 
-  const envTagPrefix = await config.apps[appName].envTagPrefix;
+  const envTagPrefix = config.apps[appName].envTagPrefix;
+  const envReqTagPrefix = config.apps[appName].envReqTagPrefix;
   console.log(`Checking for existing tag with prefix '${envTagPrefix}_${env}' tag for this app`);
   const matchedTag = (await delegates.gitFetchTags()).find(tag => tag.includes(`${envTagPrefix}_${env}`));
 
@@ -21,6 +22,7 @@ const _deploy = async (delegates, config, currentBuild, appName, buildKey, env) 
   console.log('...');
   const tagName = `${envTagPrefix}_${env}`;
   await delegates.gitSetTag(tagName);
+  if (envReqTagPrefix) await delegates.gitRemoveTag(`${envReqTagPrefix}_${env}`);
   console.log('Successfully tagged and pushed!');
 
 };
