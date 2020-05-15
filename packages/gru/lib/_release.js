@@ -19,9 +19,6 @@ const _release = async (delegates, config, currentBuild, appName, buildKey, rele
     };
   }
 
-  console.log('running the deploy method');
-  await config.apps[appName].deploy(buildKey, release);
-
   // delete the remote tat
   console.log('Tagging commit and pushing tag to Git');
   console.log('...');
