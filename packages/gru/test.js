@@ -61,7 +61,6 @@ describe('@pclabs/gru', () => {
 
     expect(spies.archive).to.equal(stubs.build);
     expect(spies.cache).to.equal(stubs.archive);
-    expect(spies.deploy).to.equal(`v2.2.2`);
     expect(spies.gitRemoveTag).to.equal(`${options.apps.test.releaseReqTagPrefix}_v2.2.2`);
     expect(spies.gitSetTag).to.equal(`${options.apps.test.releaseTagPrefix}_v2.2.2`);
   });
