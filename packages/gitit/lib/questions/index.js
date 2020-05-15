@@ -188,8 +188,8 @@ const questions = (data, answers = {}) => {
           if (answers.ticket.indexOf(' ') === 0) return 'go back and select a valid ticket';
           if (answers.ticket.split(' ')[1]) return `${answers.ticket.split(' ')[0]} already has a release(${answers.ticket.split(' ')[1]}) associated with it, go back to fix`;
           if (!semver.valid(input)) return 'Must use semantic versioning';
-          if (lowV && semver.lt(input, lowV)) return `Must be greater than ${lowV}`;
-          if (highV && semver.gt(input, highV)) return `Must be less than ${highV}`;
+          if (lowV && !semver.lt(lowV, input)) return `Must be greater than ${lowV}`;
+          if (highV && !semver.gt(highV, input)) return `Must be less than ${highV}`;
           return true;
         },
         transformer: (input) => {

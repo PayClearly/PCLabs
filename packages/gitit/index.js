@@ -24,7 +24,7 @@ module.exports = (config) => {
       await repo.sync(options);
       const repoData = await repo.parse(options);
       const projectData = await project.parse(options, repoData);
-      const ask = await lib.questions({ repoData, projectData}, answers);
+      const ask = await lib.questions({ ...options, repoData, projectData}, answers);
 
       await ask();
 
