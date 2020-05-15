@@ -17,7 +17,7 @@ module.exports = (repo) => {
       await _checkIfCredsAreValid(repo);
       await _cloneRepoIfDoesntExist(repo);
     }
-
+    
     // TODO 
     const currentBranch = shell(`cd ${location} && git rev-parse --abbrev-ref HEAD`);
     if (currentBranch !== branch && !options.stash) {
@@ -28,7 +28,8 @@ module.exports = (repo) => {
     await shell(`cd ${location} && git stash`);
 
     await shell(`cd ${location} && git checkout ${branch}`);
-    await shell(`cd ${location} && git pull --tags`);
+    await shell(`cd ${location} && git pull`);
+    await shell(`cd ${location} && git fetch --prune origin "+refs/tags/*:refs/tags/*"`);
   }
 
   async function parse() {
