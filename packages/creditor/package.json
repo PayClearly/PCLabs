@@ -11,7 +11,7 @@
     "/lib",
     "!/lib/**/**test.js",
     "index.js",
-    "importer.js",
+    "import.js",
     "patterns.js"
   ],
   "bin": "cli.js",
