@@ -5,7 +5,8 @@ const chalk = require('chalk');
 module.exports = () => {
 
   const config = lib.utils.buildConfig();
-  
+  config.package = require('./import');
+
   return {
     prompt: async (answers = {}) => {
       await _initialize(config);
@@ -33,8 +34,6 @@ module.exports = () => {
         console.log(analysis);
       }
 
-      // TODO output manifest
-
       await Promise.all((toWrite || [])
         .map((toWrite) => {
           if (toWrite.action === 'create') {
@@ -49,17 +48,20 @@ module.exports = () => {
             console.log(`${chalk.red((toWrite.action).toUpperCase())} ${toWrite.path.split(`${config.cwd}/`)[1]}`);
             return lib.fs.removeRecursive(toWrite.path);
           }
-        }));
-       
-      if (config['exporters']) {
-        const toWriteExports = await lib.utils.renderExporters(config);
-        await Promise.all(toWriteExports
-          .map((toWrite) => {
-            return lib.fs.writeFile(toWrite.path, toWrite.contents);
-          }));
+        }));      
+
+      if (config.manifest) {
+        config.package = require('./import');
+        config._analysis = lib.analyze(config);
+
+        const manifest = Object.keys(config._analysis.byUsage).reduce((acc, curr) => {
+          acc[curr] = "item";
+          return acc;
+        }, {});
+
+        lib.fs.writeFile(`${config.cwd}/${config.manifest}`.replace(/\/{2,}/g, '/'), `export default ${JSON.stringify(manifest, null, 4)}` + '\n');
       }
       
-
     },
     analyze: async () => {
       // TODO
@@ -69,15 +71,8 @@ module.exports = () => {
 };
 
 async function _initialize(config) {
-  if (config._analysis) return config._analysis;
-  config._analysis = lib.analyze(config);
-  if (config['exporters']) {
-    const toWriteExports = await lib.utils.renderExporters(config);
-    await Promise.all(toWriteExports
-      .map((toWrite) => {
-        return lib.fs.writeFile(toWrite.path, toWrite.contents);
-      }));
-  }
+  if (!config._analysis) config._analysis = lib.analyze(config); 
+  return config._analysis;
 }
 
 function questionRenderer(answers) {

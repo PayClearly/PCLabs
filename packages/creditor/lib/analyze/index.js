@@ -2,17 +2,7 @@ const pathedJSON = require('../pathedJSON');
 const fs = require('../fs');
 
 function getPackage(config, toReturn) {
-  toReturn.package = Object.keys(config.patterns || {})
-    .reduce((acc, curr) => {
-      const { plural, usage } = config.patterns[curr];
-      if (curr.indexOf(':') >= 0) return acc;
-      try {
-        acc[usage] = require(`${config.output}/${plural}`.replace(/\/\//g, '/'));
-      } catch (e) {
-        acc[usage] = {};
-      }
-      return acc;
-    }, {});
+  toReturn.package = config.package;
 }
 
 function getManifest(config, toReturn) {

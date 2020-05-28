@@ -1,5 +1,5 @@
 
 module.exports = {
-  output:  '/',
-  patterns: {},
+  rel:  '/',
+  templates: {},
 };

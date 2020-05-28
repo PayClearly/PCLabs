@@ -1,6 +1,7 @@
 
 module.exports = {
-  output: '/.temp',
+  rel: '/.temp',
+  manifest: '/.temp/manifest.js',
   exporters: true,
-  patterns: {},
+  templates: {},
 };
