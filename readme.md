@@ -1,55 +1,80 @@
+# Creditor
 
+Creditor is used for maintaining and scaffolding boiler plate template code within a repository. Once templates are defined, Creditor makes it easy to create, rename, moved, analyze and used generated code.
 
-# PayClearly Labs
+Creditor uses the structure of the file system for defining how components should be used.
 
-This repository is used to manage the public utilities that PayClearly manages. For the most part, the packages contained are helpful, for managing, tracking, and deploying interlinked projects.
-
-Highlights
-  - [Creditor](/packages/creditor): A CLI for managing a project's patterns
-  - [Gru](/packages/gru): A CLI for managing builds, deployments, and environments via git tags
-  - [Minion](/packages/minion):  Use for serving multiple app versions via a single server
-  - [Gitit](/packages/gitit): A CLI for parsing out a git trunk branch history to inform deployment/release history
-
-## Contributing
-
-In order to contribute to this porject you need to have an envronment variable NPM_TOKEN. The npm token is used to identify you with npm. If you don't plan to actually release the app it must at least be set to somthing like XXXXXX. [see this blog article](https://blog.npmjs.org/post/118393368555/deploying-with-npm-private-modules)
-
-This is a mono repo that uses [Lerna](https://lerna.js.org/) for keeping track of local dependencies. [This video](https://www.youtube.com/watch?v=Nn8G91x8tJI&app=desktop) was helpful with learning how Lerna works. Lerna must be installed globally.
-
-Clone and install and run
-
+## Usage
 ```
-$: git clone ....
-$: cd PClabs
-$: npm run bootstrap
-
+  npm install --save @pclabs/creditor
 ```
 
-### Project structure
+## Defining templates
 
-This mono repo is made up of sub-packages with the following structure. Packages have the same structure as follows
+Creditor expects there to be a /creditor directory in the given project. This directory is where Creditor is configured and where templates are defined.
 
+### ./creditor structure
+
+The directory /creditor needs to be sturctured as follows
 ```
---  /packages/[PACKAGE]
-  /_  /lib          // contains the packages local utils
-  /_  index.js      // the package's entry point
-  /_  test.js       // the test file for the package
-  /_  readme.md     // the package overview
-  /_  cli.js        // if a cli exists it is the cli entry
-  /_  package.json  // package dependencies
-```
-
-We also use [Creditor](/packages/creditor) for scaffolding out new packages with this structure
-
-```
-$: npm run scaffold
+  ... project
+  /_ creditor
+    /_ templates
+      /_ [TEMPLATED_TYPE]
+        /_ ...
+        /_ files that will be scaffolded
+    /_ config.js
 ```
 
-### Testing/Linting
+Once a [TEMPLATED_TYPE] is defined you may create this template in your repository by using the creditor cli. It is recommended that you add a line to your package.json file in order to do so.
 
-The following will run the test command across all packages
+Add to package.json:
+```
+  scripts: {
+    ...
+    "scaffold": 'creditor',
+  }
+```
+
+Once added, defined templates can be managed by calling:
+```
+  $: npm run scaffold
+```
+
+The cli will then prompt for the information needed to scaffold a given template.
+
+templates are outputted to whatever output directory defined in config.js.
+
+### /creditor/config.js
+
+/creditor/config.js is used to overwrite Creditor defaults
+```
+// config.js
+module.exports = {
+  output: './temp', // the relative output of the templates
+};
+```
+
+## Using Defined templates
+
+In order to get the full utility out of Creditor you will need to reconsider how you import and use scaffolded code. Creditor uses the structure of you files to infer the structure of your components.
+
+Within the code you wish to use scaffolded components, you'll need to do the following.
 
 ```
-$: npm run lint
-$: npm run test
+  const { MyTemplates } = require('@pclabs/creditor/import')
+  
+  // All of the items of the 'myTemplate' type will be imported and accessable in the same way they are structured in the file system
+  
+  // if a template of type 'myTemplate' named 'dope' and in location /myTemplates/some/nested/location/dope then it would be acceasble as follows
+  const dope = MyTemplates.some.nested.location.dope;
 ```
+
+
+## Example
+// TODO
+
+# Backlog
+- Document example
+- Better analysis tools
+- Manifest uploading

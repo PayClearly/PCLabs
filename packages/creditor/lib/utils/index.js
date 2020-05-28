@@ -30,7 +30,7 @@ async function moveItems(config, plural, mvSrc, mvDest) {
 
   const toWrite = [];
 
-  // Structure the analysis so that it's easiwer to use
+  // Structure the analysis so that it's easier to use
   const { usageToModify, itemsToModify } = Object.keys(analysis.byPath || {})
     .reduce((acc, path) => {
       if (path.indexOf(srcBase) !== 0) return acc;
@@ -158,13 +158,14 @@ function buildConfig() {
   const config = require(`${process.cwd()}/creditor/config.js`);
 
   config.cwd = process.cwd();
-  config.rel = config.output || '/src';
-  config.output = `${config.cwd}${config.output || '/src'}`;
+  config.rel = config.rel || '/src';
+  config.output = `${config.cwd}${config.rel || '/src'}`;
   const templates = templateConfigs(`${process.cwd()}/creditor/templates`);
+
+  config.patterns = config.templates || config.patterns || {};
 
   Object.keys(templates || {}).forEach((pattern) => {
 
-    config.patterns = config.patterns || {};
     config.patterns[pattern] = config.patterns[pattern] || {};
 
     const type = pattern.split(':')[0];

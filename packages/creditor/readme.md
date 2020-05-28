@@ -51,7 +51,8 @@ templates are outputted to whatever output directory defined in config.js.
 ```
 // config.js
 module.exports = {
-  output: './temp', // the relative output of the templates
+  rel: './temp', // the relative output of the templates
+  manifest: '', // relative location of the manifest
 };
 ```
 

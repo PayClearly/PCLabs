@@ -65,7 +65,6 @@ async function removeRecursive(path) {
     return false;
   });
   if (!children.length) {
-    console.log('here!!!!!', path);
     fs.rmdir(`${path}`.replace(/\/{2,}/g, '/'), () => {});
   }
 }
