@@ -1,0 +1,27 @@
+{
+  "name": "certificator",
+  "version": "1.0.0",
+  "description": "ACME Client for obtaining SSL Certificates from Let's Encrypt.",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "certificator": "./bin/index.js"
+  },
+  "author": "Austin Dubina",
+  "license": "MPL-2.0",
+  "dependencies": {
+    "@payclearly/acme-http-01-minon": "^1.0.2",
+    "@root/acme": "^3.0.10",
+    "@root/csr": "^0.8.1",
+    "@root/keypairs": "^0.9.0",
+    "@root/pem": "^1.0.4",
+    "commander": "^5.1.0",
+    "punycode": "^2.1.1",
+    "undefined": "^0.1.0"
+  }
+}
