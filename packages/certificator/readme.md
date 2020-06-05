@@ -5,7 +5,6 @@ An [ACME](https://tools.ietf.org/html/rfc8555) client for automatically managing
 Requires node 10.x.x for updated crypto library.
 
 ## Usage
-Use `npm link` to locally run the `certificator` command directly from the terminal.
 
 ```
   npm install -g @pclabs/certificator
