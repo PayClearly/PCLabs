@@ -12,7 +12,8 @@
   "files": [
     "/lib",
     "/_utils",
-    "index.js"
+    "index.js",
+    "cli.js"
   ],
   "bin": {
     "certificator": "cli.js"
