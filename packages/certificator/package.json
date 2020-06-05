@@ -21,7 +21,6 @@
   "author": "Austin Dubina",
   "license": "ISC",
   "dependencies": {
-    "@payclearly/acme-http-01-minon": "^1.0.3",
     "@root/acme": "^3.0.10",
     "@root/csr": "^0.8.1",
     "@root/keypairs": "^0.9.0",

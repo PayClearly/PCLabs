@@ -5,7 +5,7 @@ const bootstrap = async (opts = {})=> {
   let externalConfig;
 
   const options = {
-    environment: opts.dryRun ? 'test' : 'production',
+    environment: opts.dryRun === true ? 'test' : 'production',
     domains: opts.domain,
     maintainerEmail: opts.maintainer,
     subscriberEmail: opts.subscriber,

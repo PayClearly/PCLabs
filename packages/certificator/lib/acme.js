@@ -18,7 +18,7 @@ const AcmeWrapper = async (program) => {
     notify,
   });
 
-  const letsEncryptEnvironment = globalOptions.dryRun === 'test' ? 'acme-staging-v02.api.letsencrypt.org' : 'acme-v02.api.letsencrypt.org';
+  const letsEncryptEnvironment = globalOptions.dryRun === true ? 'acme-staging-v02.api.letsencrypt.org' : 'acme-v02.api.letsencrypt.org';
   await acme.init(`https://${letsEncryptEnvironment}/directory`);
   config.acme = acme;
 
