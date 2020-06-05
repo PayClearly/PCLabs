@@ -42,7 +42,7 @@ const _createCertificate = (config) => {
       accountKey: accountDetails.accountKey,
       csr,
       domains: config.domains,
-      challenges: { 'http-01': { set: config.set, remove: config.remove, get: config.get } },
+      challenges: { 'http-01': { set: config.setChallenge, remove: config.removeChallenge, get: config.getChallenge } },
     });
 
     if (config.certificateCreated) await config.certificateCreated(certificate);

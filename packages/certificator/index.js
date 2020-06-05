@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
 const program = require('commander');
-const ACME = require('../lib/acme');
-const pkg = require('../package.json');
+const ACME = require('./lib/acme');
+const pkg = require('./package.json');
 
 const run = async (type, program) => {
   try {

@@ -8,73 +8,23 @@ Requires node 10.x.x for updated crypto library.
 Use `npm link` to locally run the `certificator` command directly from the terminal.
 
 ```
-  npm install @pclabs/certificator
-  npm link
+  npm install -g @pclabs/certificator
   certificator --help
 ```
 
 ## Configuration
-Certificator can be configured using option flags, a config file, and/or a plugin.
+Certificator can be configured using the `--plugin` or `--config` option flags.
  
-###Optional flags 
-Run `certificator --help` for more information regarding optional flags. Does not support event callbacks.
+Use the `--plugin` flag if you require external dependencies to properly handle event callbacks. Plugins need to be packages that can be fetched and installed by Certificator.
 
-###Plugin
-Use a plugin by providing the `--plugin` option. Plugins are useful if you require external dependencies to properly handle event callbacks. Plugins need to be packages that can be fetched and installed by Certificator.
-```
-module.exports = class Config {
+`--plugin @payclearly/acme-http-01-minion@1.0.3`
 
-  // see "certificator create --help" for more information about possible options.
-  constructor(option = {}) {
-    this.maintainerEmail = option.maintainerEmail || 'austin.dubina@gmail.com';
-    this.subscriberEmail = option.subscriberEmail || 'support@payclearly.com';
-    this.subject = option.subject || 'payclearly.com';
-    this.domains = option.domains || [];
-    this.environment = option.environment || 'test';
-    this.packageAgent = option.packageAgent || this.environment + '-' + pkg.name + '/' + pkg.version;
-    this.accountId = options.accountId || '12345678';
-  }
+Alternatively, use the `--config` flag to provide an absolute path JavaScript file that exports a config object.
+By default the current working directory is set to the root of this project. This can be changed using the `--cwd` flag.
 
-  get set() {
-	// { type: 'dns-01'
-    // , identifier: { type: 'dns', value: 'foo.example.com' }
-    // , wildcard: false
-    // , dnsHost: '_acme-challenge.foo.example.com'
-    // , dnsPrefix: '_acme-challenge.foo'
-    // , dnsZone: 'example.com'
-    // , dnsAuthorization: 'zzzz' }
-    return async ({ challenge }) => { }
-  }
+`--config ./config.js`
 
-  get get() {
-    // { type: 'dns-01'
-    // , identifier: { type: 'dns', value: 'foo.example.com' }
-    // , altname: '...'
-    // , dnsHost: '...'
-    // , wildcard: false }
-    // Note: query.identifier.value is different for http-01 than for dns-01
-    //       because of how a DNS query is different from an HTTP request
-    return ({ challenge }) => { };
-  }
-
-  get remove() {
-    // same options as in set()
-    return ({ challenge }) => { }
-  }
-
-  async accountCreated(account, accountKey) { }
-
-  certificateCreated(certificate) { }
-
-  async fetchServerPrivateKey() { }
-
-  async fetchAccountDetails() { }
-
-};
-```
-###Config file
-Export a config object and provide Certificator with an absolute path the file using the `--config` flag.
-
+#### Example:
 ```
 module.exports = (options) => {
 
@@ -93,11 +43,11 @@ module.exports = (options) => {
     privateKey: options.privateKey,
     csr: options.csr,
 
-    set: ({ challenge }) => Promise.resolve(),
+    setChallenge: ({ challenge }) => Promise.resolve(),
 
-    get: ({ challenge }) => Promise.resolve(),
+    getChallenge: ({ challenge }) => Promise.resolve(),
 
-    remove: ({ challenge }) => Promise.resolve(),
+    removeChallenge: ({ challenge }) => Promise.resolve(),
 
     accountCreated: (account, accountKey) => Promise.resolve(),
 
@@ -137,16 +87,16 @@ module.exports = (options) => {
 
 ## Event Callbacks
 ```
-| callback              | Description                                                                                                 |
-| ------------------ ---| ----------------------------------------------------------------------------------------------------------- |
-| set (required)        | Should make the token url return the key authorization.                                                     |
-|                       | i.e. GET http://example.com/.well-known/acme-challenge/xxxx => xxxx.yyyy                                    |
-| remove (required)     | remove the previously set token file (just the one)                                                         | 
-| get (required)        | confirm the record was set. get the token file via the hosting service API                                  | 
-| certificateCreated    | called when certificator has received a signed certificate from Let's Encrypt CA.                           |
-| accountCreated        | called when a new account has been created with Let's Encrypt                                               |
-| fetchServerPrivateKey | called when creating a new certificate. The server private key is used to sign the CSR                      |
-| fetchAccountDetails   | callback to fetch Certificator account Details                                                              |
+| callback                  | Description                                                                                                 |
+| --------------------------| ----------------------------------------------------------------------------------------------------------- |
+| setChallenge (required)   | Should make the token url return the key authorization.                                                     |
+|                           | i.e. GET http://example.com/.well-known/acme-challenge/xxxx => xxxx.yyyy                                    |
+| removeChallenge (required)| remove the previously set token file (just the one)                                                         | 
+| getChallenge (required)   | confirm the record was set. get the token file via the hosting service API                                  | 
+| certificateCreated        | called when certificator has received a signed certificate from Let's Encrypt CA.                           |
+| accountCreated            | called when a new account has been created with Let's Encrypt                                               |
+| fetchServerPrivateKey     | called when creating a new certificate. The server private key is used to sign the CSR                      |
+| fetchAccountDetails       | callback to fetch Certificator account Details                                                              |
 ```
 
 ## Tests
