@@ -15,11 +15,11 @@ module.exports = async (options) => {
     privateKey: options.privateKey,
     csr: options.csr,
 
-    set: ({ challenge }) => Promise.resolve('setter called'),
+    setChallenge: ({ challenge }) => Promise.resolve('setter called'),
 
-    get: ({ challenge }) => Promise.resolve('getter called'),
+    getChallenge: ({ challenge }) => Promise.resolve('getter called'),
 
-    remove: ({ challenge }) => Promise.resolve('remove called called'),
+    removeChallenge: ({ challenge }) => Promise.resolve('remove called called'),
 
     accountCreated: (account, accountKey) => Promise.resolve('account created'),
 
