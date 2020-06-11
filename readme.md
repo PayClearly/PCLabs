@@ -55,26 +55,27 @@ module.exports = {
 };
 ```
 
+
 ## Using Defined templates
 
 In order to get the full utility out of Creditor you will need to reconsider how you import and use scaffolded code. Creditor uses the structure of you files to infer the structure of your components.
 
-Within the code you wish to use scaffolded components, you'll need to do the following.
+We recomend you use creditors importer and pass the context to it. You'll need to add the following to the directoy you wish to export
 
 ```
-  const { MyTemplates } = require('@pclabs/creditor/import')
-  
-  // All of the items of the 'myTemplate' type will be imported and accessable in the same way they are structured in the file system
-  
-  // if a template of type 'myTemplate' named 'dope' and in location /myTemplates/some/nested/location/dope then it would be acceasble as follows
-  const dope = MyTemplates.some.nested.location.dope;
+  const importer = require('@pclabs/creditor/import.js');
+  const context = require.context('./', true, /\.js$/));
+
+  export default importer(context
 ```
+
 
 
 ## Example
 // TODO
 
 # Backlog
+- Create export dir Project in PCLabs
 - Document example
 - Better analysis tools
 - Manifest uploading

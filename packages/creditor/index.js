@@ -5,7 +5,7 @@ const chalk = require('chalk');
 module.exports = () => {
 
   const config = lib.utils.buildConfig();
-  config.package = require('./import');
+  config.package = _getPackage(config);
 
   return {
     prompt: async (answers = {}) => {
@@ -51,7 +51,7 @@ module.exports = () => {
         }));      
 
       if (config.manifest) {
-        config.package = require('./import');
+        config.package = _getPackage(config);
         config._analysis = lib.analyze(config);
 
         const manifest = Object.keys(config._analysis.byUsage).reduce((acc, curr) => {
@@ -136,3 +136,22 @@ const logo = `
   $$  $  $$ $$  $   $   $$ $
 
 `;
+
+function _getPackage(config) {
+
+  return Object.keys(config._usageToPattern)
+    .reduce((acc, usage) => {
+
+      const pattern = config._usageToPattern[usage];
+      const plural = config.patterns[pattern].plural;
+
+      try {
+        acc[usage] = require('./import')(require('require-context')(`${config.output}/${plural}`, true, /\.js$/));
+      } catch (e) {
+        acc[usage] = {};
+      }
+
+      return acc;
+    }, {});
+
+}
