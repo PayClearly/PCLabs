@@ -144,9 +144,9 @@ function _getPackage(config) {
 
       const pattern = config._usageToPattern[usage];
       const plural = config.patterns[pattern].plural;
-
+      const path = `${config.output}/${plural}`.replace(/\/{2,}/g, '/');
       try {
-        acc[usage] = require('./import')(require('require-context')(`${config.output}/${plural}`, true, /\.js$/));
+        acc[usage] = require('./import')(require('require-context')(path, true, /\.js$/));
       } catch (e) {
         acc[usage] = {};
       }

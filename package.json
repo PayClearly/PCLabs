@@ -1,7 +1,6 @@
 {
   "name": "pclabs",
   "scripts": {
-    "scaffold": "node ./packages/creditor/cli --pattern=package --action=create --location=/",
     "lint": "lerna run lint",
     "test": "lerna run test --parallel",
     "bootstrap": "learna bootstrap"
