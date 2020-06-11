@@ -18,7 +18,7 @@ const AcmeWrapper = async (program) => {
     notify,
   });
 
-  const letsEncryptEnvironment = globalOptions.dryRun === 'test' ? 'acme-staging-v02.api.letsencrypt.org' : 'acme-v02.api.letsencrypt.org';
+  const letsEncryptEnvironment = globalOptions.dryRun === true ? 'acme-staging-v02.api.letsencrypt.org' : 'acme-v02.api.letsencrypt.org';
   await acme.init(`https://${letsEncryptEnvironment}/directory`);
   config.acme = acme;
 
@@ -53,8 +53,9 @@ const _createCSR = async (config) => {
   if (!config.privateKey && !config.fetchServerPrivateKey) throw new Error('Invalid Config. No private key or fetchServerPrivateKey callback provided.');
   const punyDomains = config.domains.map(domain => punycode.toASCII(domain)) || [];
 
-  let serverKey;
-  if (config.privateKey) serverKey = utils.resolve(config.cwd || process.cwd, config.privateKey); else serverKey = await config.fetchServerPrivateKey();
+  let serverPem;
+  if (config.privateKey) serverPem = utils.resolve(config.cwd || process.cwd, config.privateKey); else serverPem = await config.fetchServerPrivateKey();
+  const serverKey = await Keypairs.import({ pem: serverPem });
   const csrDer = await CSR.csr({ jwk: serverKey, domains: punyDomains, encoding: 'der' });
 
   return PEM.packBlock({ type: 'CERTIFICATE REQUEST', bytes: csrDer });
