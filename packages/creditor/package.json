@@ -1,6 +1,6 @@
 {
   "name": "@pclabs/creditor",
-  "version": "0.0.18",
+  "version": "0.0.19",
   "description": "Scafolding tool for maintaining application patterns",
   "main": "index.js",
   "scripts": {
