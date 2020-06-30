@@ -1,7 +1,11 @@
 
 module.exports = dirImport;
 
-function dirImport(context) {
+let context;
+function dirImport(ctx, cache = true) {
+
+  context = (cache && context) || ctx;
+
   return _nestedExporter(context, context.keys());
 
   // helper nested exporter
@@ -18,7 +22,7 @@ function dirImport(context) {
           return key.indexOf('.') < 0;
         });
 
-        const mod = context(key);
+        const mod = _try(function() { return context(key); }, function() {});
 
         const toPush = mod.default || mod;
         toPush.__creditor = { item: true };
@@ -28,20 +32,29 @@ function dirImport(context) {
       });
     return structure;
   }
+}
 
-  function _patchDeep(toSet, rest) {
-    if (rest.length <= 2) {
-      const current = toSet[rest[0]];
-      if (current) {
-        toSet[rest[0]] = rest[1];
-        Object.keys(current).forEach(function(key) { return toSet[rest[0]][key] = current[key]; });
-      } else {
-        toSet[rest[0]] = rest[1];
-      }
+function _patchDeep(toSet, rest) {
+  if (rest.length <= 2) {
+    const current = toSet[rest[0]];
+    if (current) {
+      toSet[rest[0]] = rest[1];
+      Object.keys(current).forEach(function(key) { return toSet[rest[0]][key] = current[key]; });
     } else {
-      toSet[rest[0]] = toSet[rest[0]] || { };
-      _patchDeep(toSet[rest[0]], rest.slice(1));
+      toSet[rest[0]] = rest[1];
     }
+  } else {
+    toSet[rest[0]] = toSet[rest[0]] || { };
+    _patchDeep(toSet[rest[0]], rest.slice(1));
   }
+}
 
+function _try(toTry, onErrorReturn) {
+  try {
+    const toReturn = toTry();
+    if (toReturn === undefined) return onErrorReturn;
+    return toReturn;
+  } catch (e) {
+    return onErrorReturn;
+  }
 }

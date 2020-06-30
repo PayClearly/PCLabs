@@ -139,18 +139,11 @@ const logo = `
 
 function _getPackage(config) {
 
-  return Object.keys(config._usageToPattern)
-    .reduce((acc, usage) => {
-
-      const pattern = config._usageToPattern[usage];
-      const plural = config.patterns[pattern].plural;
-      const path = `${config.output}/${plural}`.replace(/\/{2,}/g, '/');
-      try {
-        acc[usage] = require('./import')(require('require-context')(path, true, /\.js$/));
-      } catch (e) {
-        acc[usage] = {};
-      }
-
+  const src = require(`${config.output}`);
+  return Object.keys(src || {})
+    .reduce((acc, plural) => {
+      const usage = config._pluralToUsage[plural];
+      if (usage) acc[usage] = src[plural];
       return acc;
     }, {});
 

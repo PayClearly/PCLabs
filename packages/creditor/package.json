@@ -12,7 +12,7 @@
     "!/lib/**/**test.js",
     "index.js",
     "import.js",
-    "patterns.js"
+    "context.js"
   ],
   "bin": "cli.js",
   "keywords": [],

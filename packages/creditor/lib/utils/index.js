@@ -123,21 +123,6 @@ async function moveItems(config, plural, mvSrc, mvDest) {
   }
 }
 
-async function renderExporters(config) {
-  // 
-  const exporters = await fs.readFile(`${__dirname}/exporter.js`);
-
-  return Object.keys(config.patterns || {})
-    .map((pattern) => {
-      const path = `${config.output}/${config.patterns[pattern].plural}/index.js`;
-      let contents = exporters;
-      return {
-        path,
-        contents,
-      };
-    });
-}
-
 function templateConfigs(path, prefix = '', toReturn = {}) {
   const dirTree = fs.directoryTree(path);
   (dirTree.children || [])
@@ -177,6 +162,7 @@ function buildConfig() {
 
     config._pluralToPattern = { ...(config._pluralToPattern || {}), [plural]: type };
     config._usageToPattern = { ...(config._usageToPattern || {}), [usage]: type };
+    config._pluralToUsage = { ...(config._pluralToUsage || {}), [plural]: usage };
 
     config.patterns[pattern] = {
       params: ['name'],
@@ -194,7 +180,6 @@ function buildConfig() {
 
 module.exports = {
   renderPattern,
-  renderExporters,
   templateConfigs,
   buildConfig,
   moveItems,
