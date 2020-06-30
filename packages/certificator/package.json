@@ -1,6 +1,6 @@
 {
   "name": "@pclabs/certificator",
-  "version": "0.0.19",
+  "version": "0.0.20",
   "description": "ACME Client for obtaining SSL Certificates from Let's Encrypt.",
   "main": "index.js",
   "directories": {
