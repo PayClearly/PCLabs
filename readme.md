@@ -28,6 +28,7 @@ We recomend you use creditors importer and pass the context to it. You'll need t
 In the top of your soruce
 
 ```
+  // THis should be in creditor docs.. not here
   require.context = require('@pclabs/creditor/context.js')
   const src = require('@pclabs/creditor/import.js')(require.context(__dirname || './', true, /\.js$/));
   module.exports = src;

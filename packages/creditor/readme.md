@@ -63,12 +63,14 @@ In order to get the full utility out of Creditor you will need to reconsider how
 Within code you wish to use scaffolded components, you'll need to do the following.
 
 ```
-  const { MyTemplates } = require('@pclabs/creditor/import')
-  
-  // All of the items of the 'myTemplate' type will be imported and accessable in the same way they are structured in the file system
-  
-  // if a template of type 'myTemplate' named 'dope' and in location /myTemplates/some/nested/location/dope then it would be acceasble as follows
-  const dope = MyTemplates.some.nested.location.dope;
+  require.context = require('@pclabs/creditor/context.js')
+  const src = require('@pclabs/creditor/import.js')(require.context(__dirname || './', true, /\.js$/));
+  module.exports = src;
+
+  // after this is called once you may call
+
+  const src = require('@pclabs/creditor/import.js')() 
+  // without the context to get the src bundle
 ```
 
 
