@@ -1,5 +1,5 @@
 
-const _generateBuild = async (delegates, config, currentBuild, appName, buildKey) => {
+const _generateBuild = async (delegates, config, currentBuild, appName, buildKey, deployTo) => {
 
   // Skip if...
   if (currentBuild.buildKey) {
@@ -8,7 +8,7 @@ const _generateBuild = async (delegates, config, currentBuild, appName, buildKey
   }
   
   console.log('Generating new build (this takes approximately 30 seconds)');
-  const builtAt = await config.apps[appName].build(buildKey);
+  const builtAt = await config.apps[appName].build(buildKey, deployTo);
 
   console.log('BUILT: ', builtAt);
   return builtAt;
