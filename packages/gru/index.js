@@ -27,7 +27,7 @@ module.exports = (options, _delegates) => {
 
       // step 3: have webpack build code -- will skip if there is a current build
       console.log('\x1b[35m%s\x1b[0m', `\nStep 3: Generate build for deploy`);
-      const buildLocation = await _generateBuild(delegates, config, currentBuild, app, buildKey);
+      const buildLocation = await _generateBuild(delegates, config, currentBuild, app, buildKey, deployTo);
 
       // step 4: archive -- will skip if there is a current build
       console.log('\x1b[35m%s\x1b[0m', `\nStep 4: Archive build folder`);
