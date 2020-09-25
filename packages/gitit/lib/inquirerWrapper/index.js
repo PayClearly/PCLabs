@@ -89,10 +89,8 @@ async function renderPadding(size, data, questions, stateRenderer) {
   readline.moveCursor(process.stdout, 0, -size);
   await new Promise(resolve => setTimeout(resolve));
 
-  const position = await new Promise((resolve) => {
-    resolve({ y: 0, x: 0 });
-  });
-
+  const position = { y: 0, x: 0 };
+  
   return () => {
     readline.cursorTo(process.stdout, 0, position.y);
     readline.clearLine();
