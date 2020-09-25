@@ -1,6 +1,5 @@
 const inquirer = require('inquirer');
 const readline = require('readline');
-const getPosition = require('get-cursor-position');
 
 module.exports = async (questions, answers = {}, questionRenderer, stateRenderer, size, toAsk = []) => {
 
@@ -90,11 +89,7 @@ async function renderPadding(size, data, questions, stateRenderer) {
   readline.moveCursor(process.stdout, 0, -size);
   await new Promise(resolve => setTimeout(resolve));
 
-  const position = await new Promise((resolve) => {
-    getPosition.async((pos) => {
-      resolve({ y: pos.row - 2, x: pos.column});
-    });
-  });
+  const position = { y: 0, x: 0 };
 
   return () => {
     readline.cursorTo(process.stdout, 0, position.y);
