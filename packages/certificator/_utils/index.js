@@ -46,7 +46,7 @@ const validate = (type, config) => {
       if (!config.fetchAccountDetails || typeof config.fetchAccountDetails !== 'function') throw new Error('fetchAccountDetails callback is required when creating a certificate');
       if (!config.csr && !config.privateKey && (!config.fetchServerPrivateKey || typeof config.fetchServerPrivateKey !== 'function')) throw new Error('A valid server private key or fetchServerPrivateKey callback is required if no CSR is provided');
     }
-  }l
+  }
 };
 
 const resolve = (cwd, relativePath) => {

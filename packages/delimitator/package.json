@@ -1,10 +1,10 @@
 {
   "name": "@pclabs/delimitator",
   "version": "0.0.22",
-  "description": "ACME Client for obtaining SSL Certificates from Let's Encrypt.",
+  "description": "makes files.",
   "main": "index.js",
   "directories": {
-    "lib": "lib"
+    "methods": "methods"
   },
   "scripts": {
     "test": "mocha --no-timeouts"
@@ -24,6 +24,7 @@
     "commander": "^5.1.0",
     "csvtojson": "^2.0.10",
     "fs-extra": "^9.0.1",
+    "tmp": "0.0.33",
     "punycode": "^2.1.1"
   },
   "devDependencies": {
