@@ -20,7 +20,7 @@ const _writeFooter = ({ file, record, schema, aggregated }) => {
 const _validateLineCandidate = ({ field, schema, index, record, aggregated = {} }) => {
   const maxLength = schema[field];
   if (!maxLength) return ['', ''];
-  let value = `${schema['APPEND LINE'] ? schema['APPEND LINE'] : ''}`;
+  let value = '';
   if (typeof record[field] === 'function') value = record[field](aggregated); else value = record[field];
   const padding = maxLength - String(value).length;
   if (!(padding >= 0)) throw new Error(`the value "${value}" in field ${field} for record ${index + 1} has exceeded the maximum length of ${maxLength} `);
@@ -33,7 +33,7 @@ const _createLine = ({ record, schema, index, aggregated = {} }) => {
     const [value, spaces] = _validateLineCandidate({ field, schema, index, record, aggregated });
     acc = acc.concat(value, spaces);
     return acc;
-  }, '');
+  }, `${schema['PREPEND LINE'] ? schema['PREPEND LINE'] : ''}`);
   return line;
 };
 
@@ -42,7 +42,7 @@ const writeFile = (json, config, file, options) => {
 
   const records = json.map((record, index) => {
     const line = _createLine({ record, schema: bodySchema, index });
-    return line.trim().concat('\n');
+    return line.concat('\n');
   });
 
   let fileToWriteTo;

@@ -9,7 +9,7 @@ module.exports = async (input, config, file, options = {}) => {
 
     return written;
   } catch (err) {
-    console.error(`Delimitator Error: '${err.message}'. Stack: '${err.stack}'`);
-    return process.exit(1);
+    const error = `Delimitator Error: '${err.message}'. Stack: '${err.stack}'`;
+    throw new Error(error);
   }
 };

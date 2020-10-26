@@ -6,12 +6,19 @@ const createFile = require('./methods/fromFile');
 const path = require('path');
 
 const run = (csv, config) => {
-  const configObj = require(path.join(process.cwd(), config));
-
-  let fileName = `${configObj.outputName}.txt`;
-  const file = path.join(process.cwd(), fileName);
+  try {
+    const configObj = require(path.join(process.cwd(), config));
   
-  return createFile(csv, configObj, file, {});
+    if (!configObj.outputName) throw new Error('Must include an output file name in your config!');
+  
+    let fileName = `${configObj.outputName}.txt`;
+    const file = path.join(process.cwd(), fileName);
+    
+    return createFile(csv, configObj, file, {});
+  } catch (err) {
+    console.error(`Delimitator Error: '${err.message}'. Stack: '${err.stack}'`);
+    return process.exit(1);
+  }
 };
 
 program
