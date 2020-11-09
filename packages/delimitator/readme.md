@@ -18,8 +18,10 @@ As a Node package
   const config = require('/path/to/your/config');
   const csv = require('/path/to/your/csv');
 
-  const fixedWidth = await delimitator(csv, config);
+  const fixedWidthFile = await delimitator(csv, config);
 ```
+
+Delimitator support three methods for conversion: fromString, fromFile, and fromStream. All produce the same output, a path to the newly generated fixed width file.
 
 ## Configuration
 Delimitator can be configured at runtime by passing in a configuration file as the second arguement.
