@@ -34,7 +34,7 @@ const _createLine = ({ record, schema, index, aggregated = {} }) => {
     acc = acc.concat(value, spaces);
     return acc;
   }, `${schema['PREPEND LINE'] ? schema['PREPEND LINE'] : ''}`);
-  return line;
+  return `${line}${schema['APPEND LINE'] ? schema['APPEND LINE'] : ''}`;
 };
 
 const writeFile = (json, config, file, options) => {
