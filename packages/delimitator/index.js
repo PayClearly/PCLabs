@@ -4,15 +4,19 @@ const program = require('commander');
 const pkg = require('./package.json');
 const createFile = require('./methods/fromFile');
 const path = require('path');
+const fs = require('fs');
 
 const run = (csv, config) => {
   try {
     const configObj = require(path.join(process.cwd(), config));
 
-    if (!configObj.outputName) throw new Error('Must include an output file name in your config!');
+    if (!configObj.outputFileName) throw new Error('Must include an output file name in your config!');
 
-    let fileName = `${configObj.outputName}.txt`;
+    let fileName = `${configObj.outputFileName}.txt`;
     const file = path.join(process.cwd(), fileName);
+
+    const exists = fs.statSync(file);
+    if (exists) fs.unlinkSync(file);
 
     return createFile(csv, configObj, file, {});
   } catch (err) {
