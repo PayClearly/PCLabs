@@ -94,7 +94,7 @@ async function renderPadding(size, data, questions, stateRenderer) {
   return () => {
     readline.cursorTo(process.stdout, 0, position.y);
     readline.clearLine();
-    readline.clearScreenDown(process.stdout, 0, position.y);
+    readline.clearScreenDown(process.stdout);
     readline.cursorTo(process.stdout, 0, position.y);
     process.stdout.write(stateRenderer(data, questions));
   };
