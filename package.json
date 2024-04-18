@@ -3,7 +3,8 @@
   "scripts": {
     "lint": "lerna run lint",
     "test": "lerna run test --parallel",
-    "bootstrap": "learna bootstrap"
+    "bootstrap": "learna bootstrap",
+    "publish": "npx google-artifactregistry-auth && npm publish"
   },
   "devDependencies": {
     "chai": "^4.2.0",
